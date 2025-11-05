@@ -1,4 +1,4 @@
-/*
+package Models;/*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
@@ -91,7 +91,7 @@ public class HistoriaClinica {
 
     @Override
     public String toString() {
-        return "HistoriaClinica{" + "id=" + id + 
+        return "Models.HistoriaClinica{" + "id=" + id +
                 ", nroHistoria=" + nroHistoria + 
                 ", grupoSanguineo=" + grupoSanguineo + 
                 ", antecedentes=" + antecedentes + 

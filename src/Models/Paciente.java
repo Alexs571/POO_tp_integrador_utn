@@ -1,3 +1,4 @@
+package Models;
 
 import java.time.LocalDate;
 
@@ -102,7 +103,7 @@ public class Paciente {
     //toString ()
     @Override
     public String toString() {
-        return "Paciente{" + "id=" + id + 
+        return "Models.Paciente{" + "id=" + id +
                 ", nombre=" + nombre + 
                 ", apellido=" + apellido + 
                 ", dni=" + dni + ", fechaNacimiento=" + fechaNacimiento + 

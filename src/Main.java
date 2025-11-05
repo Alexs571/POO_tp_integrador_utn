@@ -1,4 +1,8 @@
 
+import Models.GrupoSanguineo;
+import Models.HistoriaClinica;
+import Models.Paciente;
+
 import java.time.LocalDate;
 
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
