@@ -114,11 +114,11 @@ public class HistoriaClinicaDAO implements DAO<HistoriaClinica> {
     
         // DELETE Logico
     @Override
-    public void eliminar(int id) throws Exception {
+    public void eliminar(long id) throws Exception {
         if (id <= 0) throw new IllegalArgumentException("id inválido");
         try (Connection conn = DataBaseConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(SOFT_DELETE_SQL)) {
-            ps.setInt(1, id);
+            ps.setLong(1, id);
             int rows = ps.executeUpdate();
             if (rows == 0) throw new SQLException("No se eliminó  ninguna historia clínica (id=" + id + ")");
         }
@@ -128,14 +128,15 @@ public class HistoriaClinicaDAO implements DAO<HistoriaClinica> {
 
     //buscar por id
     @Override
-    public HistoriaClinica getById(int id) throws Exception {
+    public HistoriaClinica getById(long id) throws Exception {
         if (id <= 0) throw new IllegalArgumentException("id inválido");
         try (Connection conn = DataBaseConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(SELECT_BY_ID_SQL)) {
-            ps.setInt(1, id);
+            ps.setLong(1, id);
             try (ResultSet rs = ps.executeQuery()) {
                 return rs.next() ? mapRow(rs) : null;
             }
+
         }
     }
 

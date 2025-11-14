@@ -11,13 +11,13 @@ import java.util.List;
 public class PacienteDAO implements DAO<Paciente> {
 
     private static final String INSERT_SQL = """
-        INSERT INTO clinica.paciente
+        INSERT INTO clinica2.paciente
             (nombre, apellido, dni, fecha_nacimiento, historia_clinica_id, eliminado)
         VALUES (?, ?, ?, ?, ?, ?)
         """;
 
     private static final String UPDATE_SQL = """
-        UPDATE clinica.paciente
+        UPDATE clinica2.paciente
            SET nombre = ?, apellido = ?, dni = ?, fecha_nacimiento = ?, 
                historia_clinica_id = ?, eliminado = ?
          WHERE id = ?
@@ -25,19 +25,19 @@ public class PacienteDAO implements DAO<Paciente> {
 
     // LOGIG delete
     private static final String SOFT_DELETE_SQL = """
-        UPDATE clinica.paciente SET eliminado = 1 WHERE id = ?
+        UPDATE clinica2.paciente SET eliminado = 1 WHERE id = ?
         """;
 
     private static final String SELECT_BY_ID_SQL = """
         SELECT id, nombre, apellido, dni, fecha_nacimiento, historia_clinica_id, eliminado
-          FROM clinica.paciente
+          FROM clinica2.paciente
          WHERE id = ?
         """;
 
     // Solo activos (eliminado = 0)
     private static final String SELECT_ALL_SQL = """
         SELECT id, nombre, apellido, dni, fecha_nacimiento, historia_clinica_id, eliminado
-          FROM clinica.paciente
+          FROM clinica2.paciente
          WHERE eliminado = 0
          ORDER BY apellido, nombre
         """;
@@ -72,11 +72,11 @@ public class PacienteDAO implements DAO<Paciente> {
             ps.setString(3, p.getDni());
             ps.setDate(4, p.getFechaNacimiento() != null ? Date.valueOf(p.getFechaNacimiento()) : null);
 
-            if (p.getHistoriaClinica() != null && p.getHistoriaClinica().getId() > 0) {
-                ps.setLong(5, p.getHistoriaClinica().getId());
-            } else {
-                ps.setNull(5, Types.BIGINT);
-            }
+                if (p.getHistoriaClinica() != null && p.getHistoriaClinica().getId() > 0) {
+                    ps.setLong(5, p.getHistoriaClinica().getId());
+                } else {
+                    ps.setNull(5, Types.BIGINT);
+                }
 
             ps.setBoolean(6, p.isEliminado()); // por default es 0
 
@@ -86,6 +86,8 @@ public class PacienteDAO implements DAO<Paciente> {
             try (ResultSet rs = ps.getGeneratedKeys()) {
                 if (rs.next()) p.setId(rs.getLong(1));
             }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -118,19 +120,23 @@ public class PacienteDAO implements DAO<Paciente> {
 
             int rows = ps.executeUpdate();
             if (rows == 0) throw new SQLException("No se actualizó ninguna fila (id=" + p.getId() + ")");
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
     }
 
 
     // DELETE Logico
     @Override
-    public void eliminar(int id) throws Exception {
+    public void eliminar(long id) throws Exception {
         if (id <= 0) throw new IllegalArgumentException("id inválido");
         try (Connection conn = DataBaseConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(SOFT_DELETE_SQL)) {
-            ps.setInt(1, id);
+            ps.setLong(1, id);
             int rows = ps.executeUpdate();
             if (rows == 0) throw new SQLException("No se eliminó  ningún paciente (id=" + id + ")");
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -139,14 +145,16 @@ public class PacienteDAO implements DAO<Paciente> {
 
     //buscar por id
     @Override
-    public Paciente getById(int id) throws Exception {
+    public Paciente getById(long id) throws Exception {
         if (id <= 0) throw new IllegalArgumentException("id inválido");
         try (Connection conn = DataBaseConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(SELECT_BY_ID_SQL)) {
-            ps.setInt(1, id);
+            ps.setLong(1, id);
             try (ResultSet rs = ps.executeQuery()) {
                 return rs.next() ? mapRow(rs) : null;
             }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -157,6 +165,8 @@ public class PacienteDAO implements DAO<Paciente> {
              PreparedStatement ps = conn.prepareStatement(SELECT_ALL_SQL);
              ResultSet rs = ps.executeQuery()) {
             while (rs.next()) list.add(mapRow(rs));
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
         return list;
     }
