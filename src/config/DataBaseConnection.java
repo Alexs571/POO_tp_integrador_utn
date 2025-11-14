@@ -7,11 +7,11 @@ import java.sql.SQLException;
 public class DataBaseConnection {
 
     // URL de conexión a la base de datos MySQL con el puerto 3306 y la base llamada "db"
-    private static final String URL = "jdbc:mysql://localhost:3308/prueba";
+    private static final String URL = "jdbc:mysql://localhost:****/prueba";
     // Usuario para la conexión
     private static final String USER = "root";
     // Contraseña del usuario
-    private static final String PASSWORD = "Gonza2026admin";
+    private static final String PASSWORD = "************";
 
     // Bloque estático para cargar el driver JDBC una sola vez al iniciar la clase
     static {
