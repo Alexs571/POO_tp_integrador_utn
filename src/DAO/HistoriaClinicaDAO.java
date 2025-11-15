@@ -14,13 +14,13 @@ public class HistoriaClinicaDAO implements DAO<HistoriaClinica> {
     
         private static final String INSERT_SQL = """
         INSERT INTO clinica2.historia_clinica
-            (eliminado, nro_historia, grupo_sanguineo, antecedentes, medicacion_actual, observaciones)
-        VALUES (?, ?, ?, ?, ?, ?)
+            (eliminado, grupo_sanguineo, antecedentes, medicacion_actual, observaciones)
+        VALUES (?, ?, ?, ?, ?)
         """;
 
     private static final String UPDATE_SQL = """
         UPDATE clinica2.historia_clinica
-           SET eliminado = ?, nro_historia = ?, grupo_sanguineo = ?, antecedentes = ?, 
+           SET eliminado = ?, grupo_sanguineo = ?, antecedentes = ?, 
                medicacion_actual = ?, observaciones = ?
          WHERE id = ?
         """;
@@ -31,21 +31,22 @@ public class HistoriaClinicaDAO implements DAO<HistoriaClinica> {
         """;
 
     private static final String SELECT_BY_ID_SQL = """
-        SELECT id, eliminado, nro_historia, grupo_sanguineo, antecedentes, medicacion_actual, observaciones
+        SELECT id, eliminado, grupo_sanguineo, antecedentes, medicacion_actual, observaciones
           FROM clinica2.historia_clinica
          WHERE id = ?
         """;
 
+    
     // Solo activos (eliminado = 0)
     private static final String SELECT_ALL_SQL = """
-        SELECT id, eliminado, nro_historia, grupo_sanguineo, antecedentes, medicacion_actual, observaciones
+        SELECT id, eliminado, grupo_sanguineo, antecedentes, medicacion_actual, observaciones
           FROM clinica2.historia_clinica
          WHERE eliminado = 0
          ORDER BY nro_historia
         """;
     
         private static final String SELECT_ALL_SQL_ID = """
-        SELECT id, eliminado, nro_historia, grupo_sanguineo, antecedentes, medicacion_actual, observaciones
+        SELECT id, eliminado, grupo_sanguineo, antecedentes, medicacion_actual, observaciones
           FROM clinica2.historia_clinica
          WHERE eliminado = 0
          ORDER BY id
@@ -76,11 +77,10 @@ public class HistoriaClinicaDAO implements DAO<HistoriaClinica> {
     private void insertarInterno(HistoriaClinica h, Connection conn) throws Exception {
         try (PreparedStatement ps = conn.prepareStatement(INSERT_SQL, Statement.RETURN_GENERATED_KEYS)) {
             ps.setBoolean(1, h.isEliminado());
-            ps.setString(2, h.getNroHistoria());
-            ps.setString(3, h.getGrupoSanguineo().toString());
-            ps.setString(4, h.getAntecedentes());
-            ps.setString(5, h.getMedicacionActual());
-            ps.setString(6, h.getObservaciones());
+            ps.setString(2, h.getGrupoSanguineo().toString());
+            ps.setString(3, h.getAntecedentes());
+            ps.setString(4, h.getMedicacionActual());
+            ps.setString(5, h.getObservaciones());
             
 
             int rows = ps.executeUpdate();
@@ -103,11 +103,10 @@ public class HistoriaClinicaDAO implements DAO<HistoriaClinica> {
              PreparedStatement ps = conn.prepareStatement(UPDATE_SQL)) {
 
             ps.setBoolean(1, h.isEliminado());
-            ps.setString(2, h.getNroHistoria());
-            ps.setString(3, h.getGrupoSanguineo().toString());
-            ps.setString(4, h.getAntecedentes());
-            ps.setString(5, h.getMedicacionActual());
-            ps.setString(6, h.getObservaciones());
+            ps.setString(2, h.getGrupoSanguineo().toString());
+            ps.setString(3, h.getAntecedentes());
+            ps.setString(4, h.getMedicacionActual());
+            ps.setString(5, h.getObservaciones());
             
         }
     }
@@ -167,7 +166,6 @@ public class HistoriaClinicaDAO implements DAO<HistoriaClinica> {
     private HistoriaClinica mapRow(ResultSet rs) throws SQLException {
         HistoriaClinica h = new HistoriaClinica();
         h.setId(rs.getLong("id"));
-        h.setNroHistoria(rs.getString("nroHistoria"));
         h.setEliminado(rs.getBoolean("eliminado"));
         h.setGrupoSanguineo(GrupoSanguineo.valueOf(rs.getString("grupoSanguineo")));
         h.setAntecedentes(rs.getString("antecedentes"));
