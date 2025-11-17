@@ -103,13 +103,16 @@ public class Paciente {
     //toString ()
     @Override
     public String toString() {
-        return "Models.Paciente{" + "id=" + id +
-                ", nombre=" + nombre + 
-                ", apellido=" + apellido + 
-                ", dni=" + dni + ", fechaNacimiento=" + fechaNacimiento + 
-                ", eliminado=" + eliminado + ", historiaClinica=" + historiaClinica +
-                ", grupoSanguineo=" + grupoSanguineo + '}';
+        return """
+               Paciente:"
+                + " ID: " + id
+                + " Nombre: " + nombre 
+                + " Apellido: " + apellido
+                + " DNI: " + dni
+                + " Fecha de nacimiento: " + fechaNacimiento
+                + " Eliminado: " + eliminado
+                + " Historia Clinica: " + historiaClinica
+                + " Grupo Sanguineo: " + grupoSanguineo;
+                """;                                                
     }
-    
-    
  }
