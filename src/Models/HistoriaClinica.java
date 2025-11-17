@@ -7,38 +7,33 @@ package Models;/*
  *
  * @author agust
  */
-public class HistoriaClinica {
-    private long id;
+    
+
+public class HistoriaClinica extends Base {
     private String nroHistoria;
     private GrupoSanguineo grupoSanguineo;
     private String antecedentes;
     private String medicacionActual;
     private String observaciones;
-    private boolean eliminado;
-    
-    //constructor vacio
-    public HistoriaClinica(){}
-    
-    //constructor completo
-    public HistoriaClinica(String nroHistoria, GrupoSanguineo grupoSanguineo,
-                           String antecedentes, String medicacionActual, String observaciones){
+
+    public HistoriaClinica(String nroHistoria, GrupoSanguineo grupoSanguineo, String antecedentes, String medicacionActual, String observaciones, int id, boolean eliminado) {
+        super(id, eliminado);
         this.nroHistoria = nroHistoria;
         this.grupoSanguineo = grupoSanguineo;
         this.antecedentes = antecedentes;
         this.medicacionActual = medicacionActual;
         this.observaciones = observaciones;
-        this.eliminado = false;
     }
     
+    
+    
+    //constructor vacio
+    public HistoriaClinica(){}
+    
+    //constructor completo
+    
+    
        // getters y setters 
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
 
     public String getNroHistoria() {
         return nroHistoria;
@@ -80,23 +75,19 @@ public class HistoriaClinica {
         this.observaciones = observaciones;
     }
 
-    public boolean isEliminado() {
-        return eliminado;
-    }
-
-    public void setEliminado(boolean eliminado) {
-        this.eliminado = eliminado;
-    }
         //to String
 
     @Override
     public String toString() {
-        return "Models.HistoriaClinica{" + "id=" + id +
-                ", nroHistoria=" + nroHistoria + 
-                ", grupoSanguineo=" + grupoSanguineo + 
-                ", antecedentes=" + antecedentes + 
-                ", medicacionActual=" + medicacionActual +
-                ", observaciones=" + observaciones + 
-                ", eliminado=" + eliminado + '}';
+        return """
+               Historia Clínica: "
+               + "ID: " + getId()
+               + "Número Historia: " + nroHistoria
+               + " Grupo sanguíneo: " + grupoSanguineo
+               + " Antecedentes: " + antecedentes
+               + " Medicación Actual: " + medicacionActual
+               + " Observaciones: " + observaciones
+               + " Eliminado: " + isEliminado()
+                """;
     }
  }
