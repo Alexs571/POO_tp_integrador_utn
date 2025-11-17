@@ -34,6 +34,11 @@ public class PacienteDAO implements DAO<Paciente> {
          WHERE id = ?
         """;
 
+    private static final String SELECT_BY_DNI_SQL = """
+    SELECT id, nombre, apellido, dni, fecha_nacimiento, historia_clinica_id, eliminado
+    FROM clinica2.paciente
+    WHERE dni = ? AND eliminado = 0
+""";
     // Solo activos (eliminado = 0)
     private static final String SELECT_ALL_SQL = """
         SELECT id, nombre, apellido, dni, fecha_nacimiento, historia_clinica_id, eliminado
@@ -158,6 +163,22 @@ public class PacienteDAO implements DAO<Paciente> {
         }
     }
 
+
+    public Paciente buscarPorDni(String dni) throws Exception {
+        try (Connection conn = DataBaseConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(SELECT_BY_DNI_SQL)) {
+
+            ps.setString(1, dni);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return mapRow(rs);
+                }
+                return null;
+            }
+        }
+    }
+
     @Override
     public List<Paciente> getAll() throws Exception {
         List<Paciente> list = new ArrayList<>();
@@ -197,4 +218,7 @@ public class PacienteDAO implements DAO<Paciente> {
 
         return p;
     }
+
+
+
 }

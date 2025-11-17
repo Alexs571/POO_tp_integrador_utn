@@ -5,12 +5,9 @@ import Models.HistoriaClinica;
 
 import java.util.List;
 
-
 public class HistoriaClinicaServiceImpl implements Service<HistoriaClinica> {
 
-
     private final HistoriaClinicaDAO historiaClinicaDAO;
-
 
     public HistoriaClinicaServiceImpl(HistoriaClinicaDAO historiaClinicaDAO) {
         if (historiaClinicaDAO == null) {
@@ -23,7 +20,6 @@ public class HistoriaClinicaServiceImpl implements Service<HistoriaClinica> {
     @Override
     public void insertar(HistoriaClinica historia) throws Exception {
         validateHistoria(historia);
-
         historiaClinicaDAO.insertar(historia);
     }
 
@@ -31,13 +27,11 @@ public class HistoriaClinicaServiceImpl implements Service<HistoriaClinica> {
         if (historia == null) {
             throw new IllegalArgumentException("La historia no puede ser null");
         }
-
-        if (historia.getGrupoSanguineo() == null ) {
-            throw new IllegalArgumentException("El grupo sanguuineo no puede estar vacio");
+        if (historia.getNroHistoria() == null || historia.getNroHistoria().trim().isEmpty()) {
+            throw new IllegalArgumentException("El número de historia clínica es obligatorio");
         }
-
-        if (historia.getGrupoSanguineo() == null ) {
-            throw new IllegalArgumentException("El grupo sanguuineo no puede estar vacio");
+        if (historia.getGrupoSanguineo() == null) {
+            throw new IllegalArgumentException("El grupo sanguíneo no puede estar vacío");
         }
     }
 
@@ -54,7 +48,7 @@ public class HistoriaClinicaServiceImpl implements Service<HistoriaClinica> {
     /** Elimina (soft delete) una historia clínica. */
     @Override
     public void eliminar(Long id) throws Exception {
-        if (id <= 0) {
+        if (id == null || id <= 0) {
             throw new IllegalArgumentException("El ID debe ser mayor a 0");
         }
         historiaClinicaDAO.eliminar(id);
@@ -66,28 +60,27 @@ public class HistoriaClinicaServiceImpl implements Service<HistoriaClinica> {
         if (id == null) {
             throw new IllegalArgumentException("El ID no puede estar vacío");
         }
-
-        if(id <= 0){
+        if (id <= 0) {
             throw new IllegalArgumentException("El ID debe ser mayor a 0");
         }
 
+        HistoriaClinica historia = historiaClinicaDAO.getById(id);
 
+        if (historia == null) {
+            throw new Exception("No se encontró ninguna historia clínica con el ID " + id);
+        }
 
-
-        return historiaClinicaDAO.getById(id);
-
+        return historia;
     }
 
     @Override
     public List<HistoriaClinica> getAll() throws Exception {
+        List<HistoriaClinica> lista = historiaClinicaDAO.getAll();
 
+        if (lista == null || lista.isEmpty()) {
+            throw new Exception("No hay historias clínicas cargadas en el sistema");
+        }
 
-
-
-        return historiaClinicaDAO.getAll();
+        return lista;
     }
-
-
-
-
 }

@@ -53,16 +53,13 @@ public class MenuHandler {
         System.out.println("Paciente deseleccionado. Volviendo al menú principal...");
     }
 
-    // =========================================================
-    //  OPCIÓN 2: Ver paciente por DNI (seleccionar)
-    // =========================================================
     // OPCIÓN 2: seleccionar paciente por DNI
     public void verPacientePorDni() {
         try {
             System.out.print("Ingrese DNI del paciente: ");
             String dni = scanner.nextLine().trim();
 
-            // Usa el método del service (asegurate de tenerlo implementado)
+
             Paciente p = pacienteService.buscarPorDni(dni);
 
             if (p == null) {
@@ -71,6 +68,14 @@ public class MenuHandler {
                 return;
             }
 
+            if (p.getHistoriaClinica() != null && p.getHistoriaClinica().getId() > 0) {
+                try {
+                    var hcCompleta = historiaService.getById(p.getHistoriaClinica().getId());
+                    p.setHistoriaClinica(hcCompleta);
+                } catch (Exception ex) {
+                    System.out.println("No se pudo cargar la historia clínica completa: " + ex.getMessage());
+                }
+            }
             // Guardamos el paciente seleccionado
             pacienteSeleccionado = p;
 
@@ -81,13 +86,15 @@ public class MenuHandler {
             System.out.println("Apellido: " + p.getApellido());
             System.out.println("DNI: " + p.getDni());
             System.out.println("Fecha de nacimiento: " + p.getFechaNacimiento());
-            System.out.println("Grupo sanguíneo: " + p.getGrupoSanguineo());
+
 
             if (p.getHistoriaClinica() != null) {
                 System.out.println("ID Historia Clínica: " + p.getHistoriaClinica().getId());
                 System.out.println("Nro Historia: " + p.getHistoriaClinica().getNroHistoria());
+                System.out.println("Grupo sanguíneo: " + p.getHistoriaClinica().getGrupoSanguineo());
             } else {
                 System.out.println("Historia Clínica: (sin historia asociada o no cargada)");
+                System.out.println("Grupo sanguíneo: (sin historia asociada o no cargada)");
             }
 
             System.out.println("Eliminado: " + p.isEliminado());
@@ -97,6 +104,7 @@ public class MenuHandler {
             System.err.println("Error al seleccionar paciente por DNI: " + e.getMessage());
         }
     }
+
 
 
     // =========================================================
@@ -239,20 +247,45 @@ public class MenuHandler {
     //  HISTORIAS CLÍNICAS
     // =========================================================
 
-    // OPCIÓN 6: Listar todas las Historias Clínicas
+    // OPCIÓN 6: Listar s Historias Clínica
     public void listarHistoriasClinicas() {
         try {
-            System.out.println("\n--- Listado de Historias Clínicas ---");
-            List<HistoriaClinica> historias = historiaService.getAll();
-            if (historias == null || historias.isEmpty()) {
-                System.out.println("No hay historias clínicas cargadas.");
+            System.out.println("\n--- Historia Clínica del paciente seleccionado ---");
+
+            if (pacienteSeleccionado == null) {
+                System.out.println("No hay ningún paciente seleccionado. Seleccione uno primero con la opción 'Ver paciente por DNI'.");
                 return;
             }
-            for (HistoriaClinica h : historias) {
-                System.out.println(h);
+
+
+            HistoriaClinica h = pacienteSeleccionado.getHistoriaClinica();
+
+            // Si por algún motivo no está cargada pero tenemos id, la buscamos en la base
+            if (h == null || h.getId() <= 0) {
+                System.out.println("El paciente seleccionado no tiene historia clínica asociada o el ID es inválido.");
+                return;
             }
+
+
+
+            if (h == null) {
+                System.out.println("No se encontró historia clínica para el paciente seleccionado.");
+                return;
+            }
+
+            // Mostramos SOLO la historia clínica de ese paciente
+            System.out.println("Paciente: " + pacienteSeleccionado.getNombre() + " " + pacienteSeleccionado.getApellido());
+            System.out.println("DNI: " + pacienteSeleccionado.getDni());
+            System.out.println("ID Historia Clínica: " + h.getId());
+            System.out.println("Nro Historia: " + h.getNroHistoria());
+            System.out.println("Grupo sanguíneo: " + h.getGrupoSanguineo());
+            System.out.println("Antecedentes: " + h.getAntecedentes());
+            System.out.println("Medicación actual: " + h.getMedicacionActual());
+            System.out.println("Observaciones: " + h.getObservaciones());
+            System.out.println("Eliminado: " + h.isEliminado());
+
         } catch (Exception e) {
-            System.err.println("Error al listar historias clínicas: " + e.getMessage());
+            System.err.println("Error al listar historia clínica: " + e.getMessage());
         }
     }
 
@@ -260,21 +293,56 @@ public class MenuHandler {
     public void actualizarHistoriaClinica() {
         try {
             System.out.println("\n--- Actualizar Historia Clínica ---");
-            System.out.print("ID de la historia clínica a actualizar: ");
-            Long id = leerLong();
 
-            HistoriaClinica h = historiaService.getById(id);
-            if (h == null) {
-                System.out.println("Historia clínica no encontrada.");
+
+            if (pacienteSeleccionado == null) {
+                System.out.println("No hay un paciente seleccionado. Use la opción 'Ver paciente por DNI' primero.");
                 return;
             }
 
-            System.out.println("Historia actual: " + h);
 
+            HistoriaClinica h = pacienteSeleccionado.getHistoriaClinica();
+            if (h == null || h.getId() <= 0) {
+                System.out.println("El paciente seleccionado no tiene historia clínica asociada.");
+                return;
+            }
 
+            Long idHistoria = h.getId();
 
+            HistoriaClinica historiaActual = historiaService.getById(idHistoria);
+            if (historiaActual == null) {
+                System.out.println("No se encontró la historia clínica en la base de datos.");
+                return;
+            }
 
-            historiaService.actualizar(h);
+            System.out.println("Historia clínica actual:");
+            System.out.println("Nro Historia: " + historiaActual.getNroHistoria());
+            System.out.println("Grupo sanguíneo: " + historiaActual.getGrupoSanguineo());
+            System.out.println("Antecedentes: " + historiaActual.getAntecedentes());
+            System.out.println("Medicación actual: " + historiaActual.getMedicacionActual());
+            System.out.println("Observaciones: " + historiaActual.getObservaciones());
+
+            // --- Pedimos nuevos datos ---
+            System.out.print("Nuevo antecedentes (Enter para dejar igual): ");
+            String nuevoAntecedentes = scanner.nextLine().trim();
+            if (!nuevoAntecedentes.isEmpty()) {
+                historiaActual.setAntecedentes(nuevoAntecedentes);
+            }
+
+            System.out.print("Nueva medicación actual (Enter para dejar igual): ");
+            String nuevaMed = scanner.nextLine().trim();
+            if (!nuevaMed.isEmpty()) {
+                historiaActual.setMedicacionActual(nuevaMed);
+            }
+
+            System.out.print("Nuevas observaciones (Enter para dejar igual): ");
+            String nuevasObs = scanner.nextLine().trim();
+            if (!nuevasObs.isEmpty()) {
+                historiaActual.setObservaciones(nuevasObs);
+            }
+
+            // 4) Actualizamos en BD
+            historiaService.actualizar(historiaActual);
             System.out.println("Historia clínica actualizada correctamente.");
 
         } catch (Exception e) {
@@ -283,18 +351,46 @@ public class MenuHandler {
     }
 
     // OPCIÓN 8: Eliminar Historia Clínica
-    public void eliminarHistoriaClinica() {
-        try {
-            System.out.println("\n--- Eliminar Historia Clínica ---");
-            System.out.print("ID de la historia clínica a eliminar: ");
-            Long id = leerLong();
-
-            historiaService.eliminar(id);
-            System.out.println("Historia clínica eliminada correctamente.");
-        } catch (Exception e) {
-            System.err.println("Error al eliminar historia clínica: " + e.getMessage());
-        }
-    }
+//    public void eliminarHistoriaClinica() {
+//        try {
+//            System.out.println("\n--- Eliminar Historia Clínica ---");
+//
+//
+//            if (pacienteSeleccionado == null) {
+//                System.out.println("No hay un paciente seleccionado. Seleccione uno primero (opción 'Ver paciente por DNI').");
+//                return;
+//            }
+//
+//
+//            HistoriaClinica h = pacienteSeleccionado.getHistoriaClinica();
+//            if (h == null || h.getId() <= 0) {
+//                System.out.println("El paciente seleccionado no tiene historia clínica asociada.");
+//                return;
+//            }
+//
+//            Long id = h.getId();
+//
+//
+//            System.out.print("¿Está seguro que desea eliminar esta historia clínica? (s/N): ");
+//            String confirm = scanner.nextLine().trim().toLowerCase();
+//
+//            if (!confirm.equals("s")) {
+//                System.out.println("Operación cancelada.");
+//                return;
+//            }
+//
+//
+//            historiaService.eliminar(id);
+//            System.out.println("Historia clínica eliminada correctamente.");
+//
+//
+//            pacienteSeleccionado.setHistoriaClinica(null);
+//
+//        } catch (Exception e) {
+//            System.err.println("Error al eliminar historia clínica: " + e.getMessage());
+//        }
+//    }
+//
 
     // =========================================================
     //  MÉTODOS AUXILIARES

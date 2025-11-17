@@ -2,15 +2,7 @@ package Models;
 
 import java.time.LocalDate;
 
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 
-/**
- *
- * @author agust
- */
 public class Paciente {
     private long id;
     private String nombre;

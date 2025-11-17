@@ -71,15 +71,9 @@ public class AppMenu {
                 }
             }
 
-            case 8 -> {
-                if (menuHandler.hayPacienteSeleccionado()) {
-                    menuHandler.eliminarHistoriaClinica();
-                } else {
-                    System.out.println("Debe seleccionar un paciente primero (opción 2).");
-                }
-            }
 
-            case 9 -> menuHandler.limpiarPacienteSeleccionado();
+
+            case 8 -> menuHandler.limpiarPacienteSeleccionado();
 
             case 0 -> {
                 System.out.println("Saliendo...");

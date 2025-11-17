@@ -30,7 +30,7 @@ public class testDAO {
 
             try {
                 System.out.println("=== 1) INSERTAR ===");
-                Paciente p = nuevoPaciente("dni-571-000");
+                Paciente p = nuevoPaciente("55555755");
                 dao.insertar(p);
                 System.out.println("Insertado con id: " + p.getId());
                 System.out.println(p.toString());

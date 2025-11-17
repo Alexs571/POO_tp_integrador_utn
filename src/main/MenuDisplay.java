@@ -18,9 +18,9 @@ public class MenuDisplay {
 
         if (mostrarOpcionesHistoria) {
             System.out.println("\nHISTORIA CLÍNICA (paciente seleccionado)");
-            System.out.println("6. Listar historias clínicas");
+            System.out.println("6. Lista historia clínica");
             System.out.println("7. Actualizar historia clínica");
-            System.out.println("8. Eliminar historia clínica");
+
             System.out.println("9. Volver atrás (deseleccionar paciente)");
         } else {
             System.out.println("\n[Seleccione un paciente con la opción 2 para ver las opciones de historia clínica]");
