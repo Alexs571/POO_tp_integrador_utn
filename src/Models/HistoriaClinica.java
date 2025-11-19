@@ -80,14 +80,22 @@ public class HistoriaClinica extends Base {
     @Override
     public String toString() {
         return """
-               Historia Clínica: "
-               ID: getId()
-               Número Historia: nroHistoria
-               Grupo sanguíneo: grupoSanguineo
-               Antecedentes: antecedentes
-               Medicación Actual: medicacionActual
-               Observaciones: observaciones
-               Eliminado: isEliminado()
-                """;
+           Historia Clínica:
+           ID: %d
+           Número Historia: %s
+           Grupo sanguíneo: %s
+           Antecedentes: %s
+           Medicación Actual: %s
+           Observaciones: %s
+           Eliminado: %s
+           """.formatted(
+                getId(),
+                getNroHistoria(),
+                getGrupoSanguineo(),
+                getAntecedentes(),
+                getMedicacionActual(),
+                getObservaciones(),
+                isEliminado()
+        );
     }
  }

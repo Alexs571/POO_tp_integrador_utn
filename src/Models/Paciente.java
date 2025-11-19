@@ -80,15 +80,15 @@ public class Paciente extends Base {
     @Override
     public String toString() {
         return """
-               Paciente:"
-                ID: getid()
-                Nombre: nombre 
-                Apellido: apellido
-                DNI: dni
-                Fecha de nacimiento: fechaNacimiento
-                Historia Clinica: historiaClinica
-                Grupo Sanguineo: grupoSanguineo
-                Eliminado: isEliminado()
-                """;                                                
+                Paciente:
+                ID: """ + getId() + """
+                Nombre: """ + nombre + """
+                Apellido: """ +  apellido + """
+                DNI: """ +  dni + """
+                Fecha de nacimiento: """ + fechaNacimiento + """
+                Historia Clinica: """ + historiaClinica + """
+                Grupo Sanguineo: """ +  grupoSanguineo + """
+                Eliminado: """ + isEliminado() + """
+                """;
     }
  }
