@@ -3,39 +3,31 @@ package Models;
 import java.time.LocalDate;
 
 
-public class Paciente {
-    private long id;
+public class Paciente extends Base {
     private String nombre;
     private String apellido;
     private String dni;
     private LocalDate fechaNacimiento;
-    private boolean eliminado;
     private HistoriaClinica historiaClinica;
     private GrupoSanguineo grupoSanguineo;
 
     
     //constructor vacio
-     public Paciente() {}
-    //  Constructor completo
-    public Paciente(String nombre, String apellido, String dni, LocalDate fechaNacimiento,
-                    HistoriaClinica historiaClinica, GrupoSanguineo grupoSanguineo) {
+     public Paciente() {
+     super();
+     }
+
+    public Paciente(String nombre, String apellido, String dni, LocalDate fechaNacimiento, HistoriaClinica historiaClinica, GrupoSanguineo grupoSanguineo, int id, boolean eliminado) {
+        super(id, eliminado);
         this.nombre = nombre;
         this.apellido = apellido;
         this.dni = dni;
         this.fechaNacimiento = fechaNacimiento;
         this.historiaClinica = historiaClinica;
         this.grupoSanguineo = grupoSanguineo;
-        this.eliminado = false;
     }
+        
     // Constructor sobrecargado?
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
 
     public String getNombre() {
         return nombre;
@@ -69,14 +61,6 @@ public class Paciente {
         this.fechaNacimiento = fechaNacimiento;
     }
 
-    public boolean isEliminado() {
-        return eliminado;
-    }
-
-    public void setEliminado(boolean eliminado) {
-        this.eliminado = eliminado;
-    }
-
     public HistoriaClinica getHistoriaClinica() {
         return historiaClinica;
     }
@@ -97,14 +81,14 @@ public class Paciente {
     public String toString() {
         return """
                Paciente:"
-                + " ID: " + id
+                + " ID: " + getid()
                 + " Nombre: " + nombre 
                 + " Apellido: " + apellido
                 + " DNI: " + dni
                 + " Fecha de nacimiento: " + fechaNacimiento
-                + " Eliminado: " + eliminado
                 + " Historia Clinica: " + historiaClinica
-                + " Grupo Sanguineo: " + grupoSanguineo;
+                + " Grupo Sanguineo: " + grupoSanguineo
+                + " Eliminado: " + isEliminado()
                 """;                                                
     }
  }
