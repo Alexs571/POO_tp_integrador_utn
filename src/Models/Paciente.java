@@ -17,7 +17,7 @@ public class Paciente extends Base {
      super();
      }
 
-    public Paciente(String nombre, String apellido, String dni, LocalDate fechaNacimiento, HistoriaClinica historiaClinica, GrupoSanguineo grupoSanguineo, int id, boolean eliminado) {
+    public Paciente(String nombre, String apellido, String dni, LocalDate fechaNacimiento, HistoriaClinica historiaClinica, GrupoSanguineo grupoSanguineo, Long id, boolean eliminado) {
         super(id, eliminado);
         this.nombre = nombre;
         this.apellido = apellido;
@@ -81,14 +81,14 @@ public class Paciente extends Base {
     public String toString() {
         return """
                Paciente:"
-                + " ID: " + getid()
-                + " Nombre: " + nombre 
-                + " Apellido: " + apellido
-                + " DNI: " + dni
-                + " Fecha de nacimiento: " + fechaNacimiento
-                + " Historia Clinica: " + historiaClinica
-                + " Grupo Sanguineo: " + grupoSanguineo
-                + " Eliminado: " + isEliminado()
+                ID: getid()
+                Nombre: nombre 
+                Apellido: apellido
+                DNI: dni
+                Fecha de nacimiento: fechaNacimiento
+                Historia Clinica: historiaClinica
+                Grupo Sanguineo: grupoSanguineo
+                Eliminado: isEliminado()
                 """;                                                
     }
  }
