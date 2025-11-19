@@ -224,6 +224,7 @@ public class MenuHandler {
             pacienteService.actualizar(p);
             System.out.println("Paciente actualizado correctamente.");
 
+
         } catch (Exception e) {
             System.err.println("Error al actualizar paciente: " + e.getMessage());
         }
@@ -294,55 +295,54 @@ public class MenuHandler {
         try {
             System.out.println("\n--- Actualizar Historia Clínica ---");
 
-
             if (pacienteSeleccionado == null) {
-                System.out.println("No hay un paciente seleccionado. Use la opción 'Ver paciente por DNI' primero.");
+                System.out.println("Debe seleccionar un paciente primero.");
                 return;
             }
 
-
             HistoriaClinica h = pacienteSeleccionado.getHistoriaClinica();
             if (h == null || h.getId() <= 0) {
-                System.out.println("El paciente seleccionado no tiene historia clínica asociada.");
+                System.out.println("El paciente seleccionado no tiene historia clínica.");
                 return;
             }
 
             Long idHistoria = h.getId();
 
+            // Cargamos la historia actual desde la BD
             HistoriaClinica historiaActual = historiaService.getById(idHistoria);
             if (historiaActual == null) {
-                System.out.println("No se encontró la historia clínica en la base de datos.");
+                System.out.println("No se encontró la historia clínica.");
                 return;
             }
 
-            System.out.println("Historia clínica actual:");
+            // Mostrar valores actuales
             System.out.println("Nro Historia: " + historiaActual.getNroHistoria());
             System.out.println("Grupo sanguíneo: " + historiaActual.getGrupoSanguineo());
             System.out.println("Antecedentes: " + historiaActual.getAntecedentes());
             System.out.println("Medicación actual: " + historiaActual.getMedicacionActual());
             System.out.println("Observaciones: " + historiaActual.getObservaciones());
 
-            // --- Pedimos nuevos datos ---
+            // Pedir nuevos valores
             System.out.print("Nuevo antecedentes (Enter para dejar igual): ");
-            String nuevoAntecedentes = scanner.nextLine().trim();
-            if (!nuevoAntecedentes.isEmpty()) {
-                historiaActual.setAntecedentes(nuevoAntecedentes);
-            }
+            String nuevosAnt = scanner.nextLine().trim();
+            if (!nuevosAnt.isEmpty()) historiaActual.setAntecedentes(nuevosAnt);
 
-            System.out.print("Nueva medicación actual (Enter para dejar igual): ");
+            System.out.print("Nueva medicación (Enter para dejar igual): ");
             String nuevaMed = scanner.nextLine().trim();
-            if (!nuevaMed.isEmpty()) {
-                historiaActual.setMedicacionActual(nuevaMed);
-            }
+            if (!nuevaMed.isEmpty()) historiaActual.setMedicacionActual(nuevaMed);
 
             System.out.print("Nuevas observaciones (Enter para dejar igual): ");
             String nuevasObs = scanner.nextLine().trim();
-            if (!nuevasObs.isEmpty()) {
-                historiaActual.setObservaciones(nuevasObs);
-            }
+            if (!nuevasObs.isEmpty()) historiaActual.setObservaciones(nuevasObs);
 
-            // 4) Actualizamos en BD
+            // Guardar en BD
             historiaService.actualizar(historiaActual);
+
+            // Refrescar sino no se actualiza
+
+            HistoriaClinica historiaRefrescada = historiaService.getById(historiaActual.getId());
+            pacienteSeleccionado.setHistoriaClinica(historiaRefrescada);
+
             System.out.println("Historia clínica actualizada correctamente.");
 
         } catch (Exception e) {

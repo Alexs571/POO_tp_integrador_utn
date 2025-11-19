@@ -17,12 +17,14 @@ public class PacienteServiceImpl implements Service<Paciente> {
     private final HistoriaClinicaDAO historiaClinicaDAO;
 
 
+
     public PacienteServiceImpl(PacienteDAO pacienteDAO, HistoriaClinicaDAO historiaClinicaDAO) {
         if (pacienteDAO == null) throw new IllegalArgumentException("PacienteDAO no puede ser null");
         if (historiaClinicaDAO == null) throw new IllegalArgumentException("HistoriaClinicaDAO no puede ser null");
         this.pacienteDAO = pacienteDAO;
         this.historiaClinicaDAO = historiaClinicaDAO;
     }
+
 
     /** Inserta un nuevo paciente. */
     @Override
