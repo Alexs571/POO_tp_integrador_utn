@@ -125,5 +125,5 @@ git push
 
 ## 8. Autor
 
-Trabajo realizado por **Alexis Da Silva**  
+Trabajo realizado por **Walter Frias,Lujan Gonzalo, Tobías Pschepiurka, Alexis Da Silva **  
 Tecnicatura Universitaria en Programación – UTN
